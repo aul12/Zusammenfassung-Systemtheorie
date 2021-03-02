@@ -1,0 +1,281 @@
+\chapter{Zustandsbeschreibung linearer Mehrgrößensysteme}
+\section{Zustandsbeschreibung}
+\subsection{Zustandsdarstellung eines nichtlinearen Systems}
+Das Anfangswertproblem (AWP)
+\begin{equation}
+    \dot{x} = f(x, u), t > 0, x(0) = x_0 \in \mathbb{R}^n
+\end{equation}
+ist die zeitkontinuierliche Zustandsdarstellung $n$-ter Ordnung eines nichtlinearen
+Systems für eine nichtlineare Vektorfunktion $f(x(t), u(t)): \mathbb{R}^n \times
+\mathbb{R}^p \to \mathbb{R}^n$ mit dem Zustand $x(t) \in \mathbb{R}^n$ und der
+Eingangsgröße $u(t) \in \mathbb{R}^p$ ($1 \leq p \leq n$), wenn es für den Anfangswert
+$x(0) \in \mathbb{R}^n$ wohlgestellt ist.
+
+\subsection{Wohlgestellheit nach Hadamard}
+Es muss gelten:
+\begin{itemize}
+    \item Lösung des AWP existiert und ist eindeutig
+    \item Lösung des AWP hängt stetig vom Anfangswert ab
+\end{itemize}
+
+Ansätze zur Überprüfung:
+\begin{itemize}
+    \item Zustandsdarstellungen die aus der Physik abgeleitet sind, sind in der Regel
+        wohlgestellt
+    \item Existenz- und Eindeutigkeitssätze aus der Theorie der Differentialgleichungen
+\end{itemize}
+
+\subsection{Ausgang}
+\subsubsection{Definition}
+In der Regelungstechnik sind nur manche Zustandsgrößen von Interesse, daher wird
+eine Ausgangs-  oder Messgröße eingeführt:
+\begin{equation}
+    y = h(x,u)
+\end{equation}
+mit $y \in \mathbb{R}^m$. Da der Durchgriff nur in wenigen Systemen relevant ist
+wird er oft weggelassen.
+
+\subsubsection{Statisches System}
+Besitzt ein System keinen Zustand, so wird es statisches System genannt:
+\begin{equation}
+    y = h(u)
+\end{equation}
+
+\subsubsection{Mehrgrößensysteme}
+Gilt $p>1$ oder $m>1$, so spricht man von einem Mehrgrößensystem.
+
+\subsection{Lineare Systeme}
+Ein System:
+\begin{eqnarray}
+    \dot{x} &=& f(x, u),\ t>0, x(0)=x_0 \in \mathbb{R}^n \\
+    y &=& h(x),\ t\geq 0
+\end{eqnarray}
+mit der Lösung $x(t) = \varphi(x_0, u(t), t)$ heißt linear, falls für alle Zeitpunkte
+$t \geq 0$ und für alle Anfangszustände $x_0$ und Eingänge $u(t)$ für die
+Ausgangsgröße $y(u, x_0, t) = h(\varphi(x_0, u(t), t))$ gilt:
+\begin{eqnarray}
+    y(\alpha_1 u_1 + \alpha_2 u_2, 0, t) &=& \alpha_1 y(u_1, 0, t) + \alpha_2 y(u_2, 0, t) \\
+    y(0, \beta_1 x_{0,1} + \beta_2 x_{0,2}, t) &=& \beta_1 y(0, x_{0,1},t) + \beta_2 y(0, x_{0,2}, t) \\
+    y(u, x_0, t) &=& y(0, x_0, t) + y(u, 0, t)
+\end{eqnarray}
+für $\alpha_1, \alpha_2, \beta_1, \beta_2 \in \mathbb{R}$ beliebig.
+
+Hinweise:
+\begin{itemize}
+    \item Es wird keine Zustandslinearität, nur E/A Linearität gefordert
+    \item Die Definition fordert keine Zeitinvarianz
+\end{itemize}
+
+\subsection{LTI Systeme}
+Ein lineares Zeitinvariantes System kann durch
+\begin{eqnarray}
+    \dot{x} &=& Ax + Bu,\ t>0, x(0) = x_0 \in \mathbb{R}^n \\
+    y &=& C x,\ t \geq 0 
+\end{eqnarray}
+beschrieben werden. Hierbei gilt: $A \in \mathbb{R}^{n \times n}, B \in \mathbb{R}^{n \times p}, C \in \mathbb{R}^{m \times n}$.
+
+Es wird stets angenommen: $\rank{B} =p$ und $\rank{C}=m$.
+
+\subsection{Ruhelage}
+Die konstante Lösung $x_R(t) =x_R$ heißt Ruhelage des nichtlinearen Systems
+\begin{equation}
+    \dot{x} = f(x,u)
+\end{equation}
+wenn für $u(t) = u_R$ gilt:
+\begin{equation}
+    f(x_R, u_R) = 0
+\end{equation}
+
+\subsection{Jacobi-Linearisierung}
+Eine Funktion $f: D \to \mathbb{R}^n$ sei auf dem Gebiet $D \subseteq \mathbb{R}^n$
+zweimal stetig differenzierbar und die Punkte $x_0$ und $x_0 + \Delta x$ liegen mitsamt
+ihrer Verbindungsstrecke in $D$. Dann gilt:
+\begin{equation}
+    f(x) = f(x_0) + \frac{\partial f}{\partial x}(x_0) (x-x_0) + \mathcal{O}^{[1+]}
+        (x-x_0)
+\end{equation}
+hierbei erfüllt das Restglied:
+\begin{equation}
+    \lim_{x\to x_0} \frac{\mathcal{O}^{[1+]}(x-x_0)}{\abs{x-x_0}} = 0
+\end{equation}
+
+\section{Lösung der Zustandsgleichung}
+\subsection{Transitionsmatrix}
+Das unerregte System $\dot{x} = Ax$ wird gelöst durch:
+\begin{equation}
+    x(t) = \Phi(t) x_0
+\end{equation}
+mit der Transistionsmatrix
+\begin{equation}
+    \Phi(t) = e^{At}
+\end{equation}
+
+\subsection{Eigenschaften der Transitionsmatrix}
+Die Transitionsmatrix $\Phi(t): \mathbb{R}^+ \to \mathbb{R}^{n \times n}$ besitzt folgende
+Eigenschaften:
+\begin{itemize}
+    \item Anfangswert:
+        \begin{equation}
+            \Phi(0) = I
+        \end{equation}
+    \item Produkteigenschaft:
+        \begin{equation}
+            \Phi(t + \tau) = \Phi(t) \Phi(\tau)
+        \end{equation}
+    \item Invertierbarkeit:
+        \begin{equation}
+            \Phi^{-1}(t) = \Phi(-t) 
+        \end{equation}
+    \item Differenzierbarkeit:
+        \begin{equation}
+            \frac{\text{d}}{\text{d}t} \Phi(t) = A \Phi(t)
+        \end{equation}
+\end{itemize}
+Damit bildet die Transitionsmatrix eine Gruppe.
+
+\subsection{Lösung der Zustandsdifferentialgleichung}
+Die ZDGL eine LTI-Systems:
+\begin{equation}
+    \dot{x} = Ax + Bu,\ t>0, x(0) = x_0 \in \mathbb{R}^n
+\end{equation}
+besitzt die eindeutige Lösung
+\begin{equation}
+    x(t) = e^{A t} x(0) + \int_0^t e^{A (t-\tau)} B u(\tau) \text{d}\tau
+\end{equation}
+
+\subsection{Darstellung über Eigenvektoren}
+$w_i$ sind die Linkseigenvektoren, $v_i$ die Rechtseigenvektoren ($W=V^{-1}$) von $A$.
+
+Dann gilt:
+\begin{equation}
+    x(t) = \sum_{i=1}^n v_i \T{w_i} e^{\lambda_i t} x(0)
+        = \sum_{i=1}^n (\T{w_i} x(0)) e^{\lambda_i t} v_i
+\end{equation}
+
+Interpretation:
+\begin{itemize}
+    \item Eigenwerte legen die Form der Eigenschwingung fest
+    \item Eigenwerte bestimmen Verteilung der Schwingung auf $x$
+    \item Anfangswerte bestimmen die Anregung der Eigenbewegungen
+\end{itemize}
+
+\section{Zustandsstabilität}
+\subsection{Asymptotische Stabilität}
+Ein lineares System heißt asymptotisch stabil, wenn die Zustandstrajektorie $x(t)$ für
+$t \to \infty$ gegen $x_R=0$ strebt, und zwar $\forall x_0 \in \mathbb{R}^n$.
+
+\subsection{Eigenwertkriterium}
+Ein lineares System ist genau dann asymptotisch stabil, falls $\Re(\lambda_i)<0,
+\forall i \in \{1, \ldots, n\}$.
+
+\subsection{Exponentielle Stabilität}
+Ein lineares, asymptotisch stabiles System ist stets auch exponentiell stabil,
+d.h.:
+\begin{equation}
+    \norm{x(t)} \leq M e^{-\alpha t} \norm{x_0},\ t \geq 0, \forall x(0) \in \mathbb{R}^n
+\end{equation}
+für $M\geq 1$ mit der Stabilitätsreserve $\alpha=-\max_{\lambda \in \sigma(A)}(\Re(\lambda))
+$
+
+\section{Steuerbarkeit}
+\subsection{Definition}
+Ein lineares System
+\begin{equation}
+    \dot{x} = Ax+Bu,\ t>0, x(0)=x_0 \in \mathbb{R}^n
+\end{equation}
+heißt steuerbar, wenn es in endlicher Zeit $T$ von einem beliebigen Anfangszustand $x(0)
+\in \mathbb{R}^n$ durch eine Eingangsgröße $u(t), 0 \leq t \leq T$ in jeden beliebigen
+Endzustand $x(T) \in \mathbb{R}^n$ überführt werden kann.
+
+\subsection{Cayley-Hamilton}
+Jede Matrix $A \in \mathbb{R}^{n \times n}$ genügt ihrer characteristischen Gleichung
+\begin{equation}
+    \det(\lambda I - A) = 0
+\end{equation}
+d.h. $A^n$ ist linear abhängig von $A^i, i \in \{0, \ldots, n-1\}$.
+
+\subsection{Kalmansches Steuerbarkeitskriterium}
+Das System
+\begin{equation}
+    \dot{x} = Ax + Bu,\ t>0, x(0)=x_0\in \mathbb{R}^n
+\end{equation}
+ist genau dann steuerbar, wenn die Steuerbarkeitsmatrix
+\begin{equation}
+    Q_s = \begin{pmatrix}
+        B & AB & A^2 B & \ldots & A^{n-1} B
+    \end{pmatrix}
+\end{equation}
+vollen Rang $n$ hat.
+
+\section{Beobachtbarkeit}
+\subsection{Definition}
+Ein lineares System
+\begin{eqnarray}
+    \dot{x} &=& Ax + Bu,\ t>0, x(0)=x_0\in \mathbb{R}^n \\
+    y &=& C x,\ t \geq 0
+\end{eqnarray}
+ist beobachtbar, wenn ein beliebiger Anfangszustand $x(0)$ aus Kenntnis des Ein- und
+Ausgangs $u(t)$ und $y(t)$ auf einem Intervall $0\leq t \leq T$ in endlicher Zeit
+bestimmt werden kann.
+
+\subsection{Kalmansches Beobachtbarkeitskriterium}
+Das System
+\begin{eqnarray}
+    \sysm \\
+    \sysom \\
+\end{eqnarray}
+ist genau dann beobachtbar, wenn die Beobachtbarkeitsmatrix
+\begin{equation}
+    Q_B = \begin{pmatrix}
+        C \\ C A \\ \vdots \\ C A^{n-1}
+    \end{pmatrix}
+\end{equation}
+vollen Rang $n$ hat, d.h. $\rank{Q_B} = n$.
+
+\section{Ein-/Ausgangsverhalten}
+\subsection{Übertragungsmatrix}
+Die Übertragungsmatrix des LTI Systems
+\begin{eqnarray}
+    \sysm \\
+    \sysom
+\end{eqnarray}
+ist die analytische Fortsetzung von
+\begin{equation}
+    F(s) = C{(sI-A)}^{-1}B
+\end{equation}
+
+\subsection{Gewichtsmatrix}
+Die Gewichtsmatrix des LTI-Systems
+\syo
+ist durch
+\begin{equation}
+    G(t) = C e^{At} B,\ t \geq 0
+\end{equation}
+gegeben.
+
+\subsection{BIBO-Stabilität}
+Das LTI-System
+\syo
+heißt BIBO-Stabil, wenn für beliebige beschränkte Eingangssignale, d.h.
+\begin{equation}
+    \norm{u(t)} \leq u_\text{max} < \infty,\ t \geq 0
+\end{equation}
+auch das Ausgangssignal beschränkt bleibt, d.h.:
+\begin{equation}
+    \norm{y(t)} \leq y_\text{max} < \infty,\ t \geq 0
+\end{equation}
+
+\subsection{Kriterium für BIBO-Stabilität}
+Das LTI-System
+\syo
+ist BIBO-stabil genau dann, wenn alle Elemente $G_{ij}(t)$ der Gewichtsmatrix $G(t)$
+absolut integrierbar sind, d.h.
+\begin{equation}
+    \int_0^\infty \abs{G_{ij}(\tau)} \text{d}\tau < \infty,\ 
+    i \in \{1, \ldots, m\}, j \in \{1, \ldots, p\}
+\end{equation}
+oder die Übertragungsfunktion $F(s)$ keine Pole in der abgeschlossenen rechten komplexen
+Halbebene besitzt.
+
+Bemerkung: Aus Zustandstabilität folgt Übertragungsstabilität, nicht jedoch in die andere
+Richtung.

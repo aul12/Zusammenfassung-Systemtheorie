@@ -1,0 +1,86 @@
+\documentclass[10pt]{report}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
+\usepackage[ngerman]{babel}
+\usepackage{commath}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{tikz-timing}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{xstring}
+\usepackage{circuitikz}
+\usepackage{listings}
+\usepackage{todonotes}
+\usepackage[final]{pdfpages}
+\usepackage{listings}
+\usepackage{subcaption}
+\usepackage{circuitikz}
+\usepackage{varwidth}
+\usepackage{algpseudocode}
+\usepackage{trfsigns}
+\usepackage{hyperref}
+\usepackage[withpage]{acronym}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{tcolorbox}
+
+
+\usetikzlibrary{calc,shapes.multipart,chains,arrows}
+
+\newcommand{\Prb}[1]{P(\text{#1})}
+\newcommand{\CPr}[2]{P(\text{#1}|\text{#2})}
+\DeclareMathOperator*{\dx}{\text{ d}x}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\sign}{sign}
+\DeclareMathOperator*{\trace}{trace}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\rank}{rank}
+\newcommand{\T}[1]{#1^\text{T}}
+\newcommand{\sysm}[0]{\dot{x} &=& Ax + Bu,\ t>0, x(0)=x_0\in \mathbb{R}^n}
+\newcommand{\sys}[0]{\dot{x} = Ax + Bu,\ t>0, x(0)=x_0\in \mathbb{R}^n}
+\newcommand{\sysom}[0]{y &=& C x,\ t \geq 0}
+\newcommand{\syso}[0]{y = C x,\ t \geq 0}
+\newcommand{\syo}[0]{\begin{eqnarray} \sysm \\ \sysom \end{eqnarray}}
+\newcommand{\sy}[0]{\begin{equation} \sys\end{equation}}
+
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\tikzset{
+    max width/.style args={#1}{
+        execute at begin node={\begin{varwidth}{#1}},
+        execute at end node={\end{varwidth}}
+    }
+}
+
+\setlength\parindent{0pt}
+
+\title{Systemtheorie -- Mehrgrößenregelung im Zustandsraum}
+\author{Paul Nykiel}
+
+\begin{document}
+    \maketitle
+    \pagebreak
+    This page is intentionally left blank.
+    \pagebreak
+    \tableofcontents
+    \pagebreak
+    \input{sections/01-zustand.tex}
+    \input{sections/02-stabilisierung.tex}
+    \input{sections/03-fuehrungsstoergroessen.tex}
+    \input{sections/04-steuerung.tex}
+    \input{sections/05-beobachter.tex}
+    \input{sections/06-zwei-fhg.tex}
+
+    \appendix
+\end{document}
