@@ -1,1 +1,36 @@
 \chapter{Stabilisierung linearer Systeme im Zustandsraum}
+\section{Stabilisierbarkeit}
+\subsection{Kalman Kriterium}
+Wenn das System steuerbar ist, so sind alle Eigenwerte frei vorgebbar.
+
+\subsection{Hautus Kriterium}
+Ein Eigenwert $\lambda$ ist durch eine Zustandsrückführung verschiebbar, falls
+\begin{equation}
+    \rank \begin{pmatrix} A-\lambda I \end{pmatrix} = n
+\end{equation}
+gilt. In diesem Fall bezeichnet man den Eigenwert $\lambda$ als steuerbar, sind alle Eigenwerte steuerbar,
+so ist das System steuerbar.
+
+\subsection{Stabilisierungbarkeitskriterium}
+Ein lineares System ist genau dann stabilisierbar, falls alle instabilen Eigenwerte steuerbar sind.
+
+\section{Eigenwertvorgabe}
+\subsection{Zustandsreglerformel der Vollständigen Modalen Synthese}
+Mit $\tilde{\lambda}_i$ den neuen Eigenwerten und $p_i$ den Parametervektoren gilt:
+\begin{eqnarray}
+    \tilde{v}_i &=& {(A-\tilde{\lambda}_i I)}^{-1} B p_i,\ i \in \{1, \ldots, n\} \\
+    K &=& \begin{pmatrix} p_1 & \ldots & p_n \end{pmatrix}
+            {\begin{pmatrix}\tilde{v}_1 & \ldots \tilde{v}_n \end{pmatrix}}^{-1}
+\end{eqnarray}
+
+Bemerkungen:
+\begin{itemize}
+    \item Für reeles $K$ müssen Eigenwert konjugiert komplex vorgegeben werden
+    \item Kein Regelungseigenwert darf mit Streckeneigenwert überein stimmen
+    \item $\tilde{\lambda}_i$ und $p_i$ müssen so gewählt werden, das $\tilde{v}_i$
+        linear unabhängig
+    \item Parametervektoren beeinhalten $n(p-1)$ Fhg, im Mehrgrößenfall
+        auch Eigenvektorvorgabe
+\end{itemize}
+
+\section{Quadratisch optimaler Regler: Riccati-Regler}
