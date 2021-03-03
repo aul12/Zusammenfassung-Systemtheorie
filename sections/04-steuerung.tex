@@ -1,1 +1,128 @@
 \chapter{Steuerungsentwurf im Zustandsraum}
+\section{Modellgestütze Vorsteuerung}
+\subsection{Führungsgrößenaufschaltung}
+\subsubsection{Definition Exaktes Folge}
+Die Regelgröße folgt dem Sollverlauf $y_s$ exakt, wenn
+\begin{equation}
+    y(t) = y_s(t),\ \forall t \geq 0
+\end{equation}
+bzw. $y \equiv y_s$.
+
+\subsubsection{Definition Asymptotisches Folgen}
+Die Regelgröße folgt der Führungsgröße $w$ asymptotisch, wenn
+\begin{equation}
+    \lim_{t \to \infty} y(t) - w(t) = 0
+\end{equation}
+dabei soll $y$ den Verlauf von $w$ schnell und gut gedämpft annehmen.
+
+Ansatz: Vorgabe des Folgeverhaltens durch Festlegung des Führungsübertragungsverhaltens:
+\begin{equation}
+    y_s(s) = F_w(s) w(s) \stackrel{!}{=} y(s)
+\end{equation}
+
+\subsubsection{Führungsgrößenaufschaltung}
+Ansatz:
+\begin{equation}
+    u = -K x + M w
+\end{equation}
+Bestimmung $K$ über Eigenwertvorgabe oder Ricatti Regler.
+
+Vorfilter $M$ für stationäre Genauigkeit:
+\begin{equation}
+    M = {\left(C{(-A+BK)}^{-1}B\right)}^{-1}
+\end{equation}
+
+Voraussetzungen für Existenz:
+\begin{itemize}
+    \item Kein Regelungseigenwert bei Null
+    \item Keine invariante Nullstelle der Strecke bei $0$
+\end{itemize}
+
+\subsection{Ein-/Ausgangsentkopplung}
+\subsubsection{Definition Differenzgrad}
+Die Ausgangsgröße $y_{s,i}$ hat Differenzgrad $r_i$, wenn:
+\begin{eqnarray}
+    \T{c_i} A^k B &=& \T{0},\ k \in \{0, 1, \ldots, r_i-2\} \\ 
+    \T{c_i} A^{r_i-1} B &\neq& \T{0}
+\end{eqnarray}
+Die Summe $r = \sum_i r_i \leq n$ heißt Differenzgrad des Systems.
+
+\subsubsection{Entkoppelbarkeitskriterium}
+Ein LTI-System ist ein-/ausgangsentkoppelbar genau dann wenn $\det D^* \neq 0$ mit:
+\begin{equation}
+    D^* = \begin{pmatrix}
+            \T{c_1} A^{r_1-1} B \\
+            \vdots \\
+            \T{c_p} A^{r_p-1} B \\
+        \end{pmatrix}
+\end{equation}
+
+dann können die $p$ Integrierketten entkoppelt werden:
+\begin{equation}
+    u_s = {(D^*)}^{-1} (-A^* x_s + \bar{u}_s)
+\end{equation}
+
+\subsubsection{Entkopplungsregler nach Falb-Wolovich}
+Der Entkopplungsregler 
+\begin{equation}
+    u_s = - {(D^*)}^{-1} \begin{pmatrix}
+            \T{k_1^*} \\ \vdots \\ \T{k_m^*}
+        \end{pmatrix} +
+        {(D^*)}^{-1} \begin{pmatrix}
+            \tilde{a}_0^1 \\
+             & \ddots \\
+             & & \tilde{a}_0^p
+        \end{pmatrix} w
+\end{equation}
+mit
+\begin{equation}
+    D^* = \begin{pmatrix}
+            \T{c_1} A^{r_1-1} B \\
+            \vdots \\
+            \T{c_p} A^{r_p-1} B \\
+        \end{pmatrix}
+\end{equation}
+und
+\begin{equation}
+    \T{k^*_i} = \T{c_i} \left(A^{r_i} + \sum_{j=0}^{r_i-1} \tilde{a}_j^i A^j \right)
+\end{equation}
+
+bewirkt die Ein-/Ausgangsentkopplung des vorgesteuerten Führungsverhaltens, d.h.:
+\begin{equation}
+    F_w(s) = \begin{pmatrix}
+        \frac{\tilde{a}_0^1}{s^{r_1} + \tilde{a}^1_{r_1-1} s^{r_1-1} + \ldots + \tilde{a}_0^1} \\
+        & \ddots \\
+        & & \frac{\tilde{a}_0^p}{s^{r_p} + \tilde{a}^p_{r_p-1} s^{r_p-1} + \ldots + \tilde{a}_0^p} 
+    \end{pmatrix}
+\end{equation}
+
+Stabilität:
+
+$n-r$ Eigenwerte $\tilde{\lambda}_i$ ($i\in\{r+1, \ldots, n\}$) werden mit invarianten
+Nullstellen kompensiert.
+
+\subsubsection{Hinreichendes Stabilitätskriterium für stabile Entkopplung}
+Die Entkopplungsregelung ist exponentiell stabil, wenn die Strecke minimalphasig ist,
+d.h. wenn für alle invarianten Nullstellen $\eta_i$ ($i\in \{1, \ldots, n-r\}$)
+\begin{equation}
+    \Re(\eta_i) < 0
+\end{equation}
+gilt.
+
+\subsection{Vorsteuerung des Störverhaltens}
+
+\section{Inversionsbasierte Ausgangsfolge}
+\subsection{Ein-/Ausgangsnormalform}
+
+\subsection{Ausgangsfolge}
+
+\section{Flachheitsbasierter Arbeitspunktwechsel}
+\subsection{Arbeitspunktwechsel}
+
+\subsection{Flachheit linearer Systeme}
+
+\subsection{Bestimmung flacher Ausgänge}
+
+\subsection{Flachheitsbasierter Steuerungsentwurf}
+
+\subsection{Arbeitspunktwechsel für die Regelgröße}
