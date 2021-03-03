@@ -1,1 +1,176 @@
 \chapter{Berücksichtigung von Führungs- und Störgrößen}
+\section{Problemstellung}
+Ausgangspunkte: LTI System mit zusätzlichem Störeingang
+\begin{eqnarray}
+    \dot{x} &=& Ax + Bu + Gd,\ t>0, x(0)=x_0 \in \mathbb{R}^n \\
+    y &=& C x
+\end{eqnarray}
+Asymptotisches Folgen soll sichergestellt werden:
+\begin{equation}
+    \lim_{t \to \infty} e_y = \lim_{t \to \infty} y(t) - w(t) \stackrel{!}{=} 0 
+\end{equation}
+
+\section{Modellierung von Führungs- und Störgrößen}
+Führungs- und Störgrößen als Lösung einer ODE darstellen:
+\begin{eqnarray}
+    \dot{v} &=& Sv,\ t>0, v(0)=v_0\in \mathbb{R}^{n_v} \\
+    d &=& Pv,\ t \geq 0 \\
+    w &=& Qv,\ t \geq 0
+\end{eqnarray} 
+mit $(P,S)$ und $(Q,S)$ beobachtbar. Resultat: Es muss nur der (unbekannte) Anfangszustand
+$v_0$ Kompensiert werden, keine Dauerstörung, d.h. Zustandsrückführung ausreichend.
+
+
+\section{Führungs- und Störgrößenaufschaltung}
+Die Zustandsrückführung mit Führungs- und Störgrößenaufschaltung
+\begin{equation}
+    u = -Kx + (K \Pi + \Gamma) v
+\end{equation}
+erzielt asymptotisches Folgen, d.h.
+\begin{equation}
+    \lim_{t \to \infty} e_y(t) = 0,\ \forall x(0) \in \mathbb{R}^n, \forall v(0) \in
+        \mathbb{R}^{n_v}
+\end{equation}
+wenn
+\begin{itemize}
+    \item $A-BK$ ist Hurwitz Matrix
+    \item $\Pi$ und $\Gamma$ sind Lösung der \glqq{}regulator equations\grqq{}:
+        \begin{eqnarray}
+            \Pi S - A \Pi &=& GP + B \Gamma \\
+            C \Pi &=& Q
+        \end{eqnarray}
+\end{itemize}
+
+\subsection{Starke Übertragungsblockierung}
+Das Eingangssignal $u(t) = u_0 e^{\eta t}, \eta \notin \sigma(A)$, wird für $x(0)=c_p$
+nicht zum Ausgang übertragen, bzw. stark übertragungsblockiert, falls:
+\begin{equation}
+    \begin{pmatrix}
+        A - \eta I & B \\
+        C & 0
+    \end{pmatrix}
+    \begin{pmatrix} c_p \\ u_0 \end{pmatrix} = 0
+\end{equation}
+
+\subsection{Invariante Nullstellen}
+Die Lösungen $\eta$ von
+\begin{equation}
+    \det P(s) = 0
+\end{equation}
+mit der Rosenbrock-Matrix
+\begin{equation}
+    P(s) = 
+    \begin{pmatrix}
+        A - s I & B \\
+        C & 0
+    \end{pmatrix}
+\end{equation}
+
+heißen invariante Nullstellen der Strecke $(C, A, B)$ mit der Zustandsnullstellenrichtung
+$c_p$ und der Eingangsnullstellenrichtung $u_0$.
+
+Hinweise:
+\begin{itemize}
+    \item $\det F(s)=0$ kann nicht zur Berechnung der invarianten Nullstellen genutzt werden
+    \item Invariante Nullstellen sind Systemgrößen des Zustandsmodells, nicht des
+        Übertragungsverhaltens.
+    \item Können nicht durch Zustandsrückführung verschoben werden
+\end{itemize}
+
+\subsection{Lösbarkeit der Regulator Equations}
+Die \glqq{}regulator equations\grqq{} haben für $\dim y = \dim u$ eine Eindeutige Lösung
+$(\Pi, \Gamma)$, wenn keine invarianten Nullstellen von $(C, A, B)$ mit einem
+Eigenwert von $S$ übereinstimmt.
+
+\subsection{Diskussion}
+Vorteile:
+\begin{itemize}
+    \item Regelgröße $y$ muss nicht gemessen werden
+    \item Keine Verringerung der Stabilitätsreserve der Regelung
+\end{itemize}
+
+Nachteile:
+\begin{itemize}
+    \item Asymptotische Störkompensation vom Eingriffsort abhängig
+    \item Nicht robust (bei Modellunbestimmtheiten)
+\end{itemize}
+ 
+\section{Internes-Modell-Prinzip}
+Annahme: $w, d$ wieder über Signalmodell $S$, $P$, $Q$ können aber unbekannt sein.
+
+Signalmodell:
+\begin{equation}
+    \dot{\bar{v}}_i = S \bar{v}_i + b_{y_i} (y_i - w_i)
+\end{equation}
+Anregung mit Eigenschwingungen, also Aufklingen von $\bar{v}_i$. Stabilisierung
+des erweiterten Systems (System + Signalmodell).
+
+\subsection{Davisonansatz}
+Zusammenfassung der Signalmodelle (ohne Führungsgröße):
+\begin{equation}
+    \dot{\bar{v}} = S^* \bar{v} + B_y y
+\end{equation}
+mit
+\begin{eqnarray}
+    \bar{v} &=& \begin{pmatrix}
+            \bar{v}_1 \\ \vdots \\ \bar{v}_p
+        \end{pmatrix} \\
+    S^* &=& \begin{pmatrix}
+            S \\
+             & \ddots \\
+             & & S
+        \end{pmatrix} \\
+    B_y &=& \begin{pmatrix}
+            b_{y_1} \\
+             & \ddots \\
+             & & b_{y_p}
+        \end{pmatrix}
+\end{eqnarray}
+
+erweitertes System:
+\begin{eqnarray}
+    \begin{pmatrix} \dot{\bar{v}} \\ \dot{x} \end{pmatrix} &=&
+        \begin{pmatrix} S^* & B_y C \\ 0 & A \end{pmatrix}
+        \begin{pmatrix} \bar{v} \\ x \end{pmatrix} +
+        \begin{pmatrix} 0 \\ B \end{pmatrix} u \\
+    y &=& \begin{pmatrix} 0 & C \end{pmatrix}
+        \begin{pmatrix} \bar{v} \\ x \end{pmatrix}
+\end{eqnarray}
+
+\subsection{Stabilisierbarkeit des erweiterten Systems}
+Das erweiterte System
+\begin{eqnarray}
+    \begin{pmatrix} \dot{\bar{v}} \\ \dot{x} \end{pmatrix} &=&
+        \begin{pmatrix} S^* & B_y C \\ 0 & A \end{pmatrix}
+        \begin{pmatrix} \bar{v} \\ x \end{pmatrix} +
+        \begin{pmatrix} 0 \\ B \end{pmatrix} u \\
+    y &=& \begin{pmatrix} 0 & C \end{pmatrix}
+        \begin{pmatrix} \bar{v} \\ x \end{pmatrix}
+\end{eqnarray}
+ist steuerbar, wenn
+\begin{itemize}
+    \item $(A, B)$ steuerbar
+    \item $(S, b_{y_i}$ ($i \in \{1, \ldots, p\}$) steuerbar
+    \item Keine invariante Nullstelle von $(C, A, B)$ stimmt mit einem
+        Eigenwert von $S$ überein.
+\end{itemize}
+
+Ergebnis: Dynamische Zustandsrückführung für robustes asymptotisches Folgen:
+\begin{eqnarray}
+    \dot{\bar{v}} &=& S^* \bar{v} + B_y (y-w) \\
+    u &=& -K_{\bar{v}} \bar{v} - K_x x
+\end{eqnarray}
+
+\subsection{Diskussion}
+Vorteile:
+\begin{itemize}
+    \item Robust
+    \item Unabhängig vom Eingriffsort
+\end{itemize}
+
+Nachteile:
+\begin{itemize}
+    \item Reglerdifferenz muss messbar sein
+    \item Signalmodell verringert Stabilitätsreserve
+    \item Regler hat Eigenwerte auf der Imaginärachse (Windup Vermeidung)
+\end{itemize}
