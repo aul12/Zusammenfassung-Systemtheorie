@@ -34,3 +34,28 @@ Bemerkungen:
 \end{itemize}
 
 \section{Quadratisch optimaler Regler: Riccati-Regler}
+\subsection{Riccati-Regler}
+Gegeben sei das quadratische Gütemaß
+\begin{equation}
+    J = \frac{1}{2} \int_0^\infty \T{x(\tau)} Q x(\tau)
+        + \T{u(\tau)} R u(\tau) \text{d} \tau
+\end{equation}
+mit $Q>0$ und $R>0$. Dann ist die optimale Zustandsrückführung, der sogenannte Riccati-
+Regler durch
+\begin{equation}
+    u = -Kx
+\end{equation}
+mit
+\begin{equation}
+    K = R^{-1} \T{B} P
+\end{equation}
+gegeben, welcher $J$ für das steuerbare LTI-System
+\sy
+minimiert und exponentiell stabilisiert. Darin ist $P>0$ die eindeutige Lösung der
+algebraischen Riccati-Gleichung:
+\begin{equation}
+    PA+\T{A}P-PBR^{-1}\T{B}P+Q=0
+\end{equation}
+
+Bemerkung: es reicht auch $Q>0$ dann muss aber für ein $Q_0$ mit $Q=\T{Q_0}Q_0$ (Cholesky-
+Zerlegung) die Beobachtbarkeit von $(Q_0, A)$ gelten.
