@@ -109,20 +109,231 @@ d.h. wenn für alle invarianten Nullstellen $\eta_i$ ($i\in \{1, \ldots, n-r\}$)
 \end{equation}
 gilt.
 
+\subsubsection{Entkoppelbarkeitskriterium}
+Ein LTI-System $n$-ter Ordnung mit Differenzgrad $r$ ist ein-/ausgangsentkoppelbar genau
+dann, wenn für seine Rosenbrock-Matrix $P(s)$ gilt:
+\begin{equation}
+    \deg \det P(s) = n-r
+\end{equation}
+
+\subsubsection{Dynamische Erweiterung}
+Idee: Weitere Integrierer einbauen:
+\begin{eqnarray}
+    \dot{x} &=& Ax + BG_1 \xi + B G_2 \bar{u}_2 \\
+    \dot{\xi} &=& \bar{u}_1 \\
+    C &=& Cx
+\end{eqnarray}
+
+Bestimmung von $n_\xi$ und $G$ für die dynamische Erweiterung zur Erzielung von
+$\tilde{r} = r+p-\gamma > r$:
+\begin{itemize}
+    \item Ordnung der dynamischen Erweiterung:
+        \begin{equation}
+            n_\xi = p - \mu - \gamma
+        \end{equation}
+        mit
+        \begin{equation}
+            \mu = p - \rank D^*
+        \end{equation}
+        und einer Matrix $Q \in \mathbb{R}^{\mu \times p}$, $\rank Q = \mu$ mit
+        \begin{equation}
+            Q D^* = 0
+        \end{equation}
+        $\gamma$ bezeichnet die $0$-Spalten in $Q$.
+    \item Berechnung von $G=\begin{pmatrix}G_L & G_R\end{pmatrix}$ ($G_L$ enthält $p-\mu$ Spalten,
+        $G_R$ $\mu$ Spalten) aus:
+        \begin{equation}
+            \begin{pmatrix} 0 & I \end{pmatrix} D^* G_L = I
+        \end{equation}
+        (die linke Matrix besteht aus $\mu$-Nullspalten und einer Identitätsmatrix
+        der Größe $p-\mu$) und
+        \begin{equation}
+            D^* G_R = 0
+        \end{equation}
+        mit $\rank G_R = \mu$.
+\end{itemize} 
+
+\subsubsection{Dynamischer Erweiterungsalgorithmus}
+Erweitern bis Erweitertes System entkoppelbar:
+
+Abbruchbedingung: 
+\begin{equation}
+    \delta_{i+1} = \deg \det P(s)
+\end{equation}
+mit
+\begin{equation}
+    \delta_{i+1} = \delta_i - (p - \rank D^*_i)
+\end{equation}
+und
+\begin{equation}
+    \delta_0 = n - r
+\end{equation}
+
+Falls Strecke minimalphasig, terminiert Algorithmus nach endlich vielen Schritten.
+
 \subsection{Vorsteuerung des Störverhaltens}
+Ausgangspunkt: Strecke mit messbarer Störung und bekannter Störeingangsmatrix,
+Vorsteuerung für asymptotische Störkompensation.
+
+Zustandsrückführung mit Störgrößenaufschaltung im Modellregelkreis:
+\begin{equation}
+    u_s = -K x_s + M_d d
+\end{equation}
+$K$ mit Eigenwertvorgabe oder Riccati-Regler, $M_d$ für asymptotische Störkompensation:
+\begin{equation}
+    M_d = -{\left(C{(-A+BK)}^{-1} B\right)}^{-1} C {(-A + BK)}^{-1}G
+\end{equation}
+Vorraussetzungen:
+\begin{itemize}
+    \item Kein Regelungseigenwert bei $0$
+    \item Keine Invariante Nullstelle der Strecke bei $0$
+\end{itemize}
 
 \section{Inversionsbasierte Ausgangsfolge}
 \subsection{Ein-/Ausgangsnormalform}
+\begin{enumerate}
+    \item Zustandsgrößen $\xi_j^i$ ($j\in\{1, \ldots, r_i\}$) der Ein-/Ausgansdynamik
+        zum Ausgang $y_i$:
+        \begin{eqnarray}
+            \xi_1^i &=& y_i = \T{c_i} x \\
+            \xi_2^i &=& \dot{y_i} = \T{c_i} A x \\
+            &\vdots& \\
+            \xi_{r_i}^i &=& y_i^{(r_i-1)} = \T{c_i} A^{r_i-1} x
+        \end{eqnarray}
+        für $i \in \{1, \ldots, p\}$ resultiert in $r$ Zustandsgrößen mit:
+        \begin{equation}
+            \xi = T_\xi x
+        \end{equation}
+    \item Zustandsgrößen $\eta_i$ ($i\in\{1, \ldots, n-r\}$) der internen Dynamik mit
+        \begin{equation}
+            \eta = T_\eta x
+        \end{equation}
+        finde $T_\eta$, so dass
+        \begin{equation}
+            \det \begin{pmatrix} T_\xi \\ T_\eta \end{pmatrix} \neq 0
+        \end{equation}
+        so dass die Koordinatentransformation gültig ist.
+    \item Eingangsnormalisierung: Falls $T_\eta B =0$ gilt, so hängt das $\eta$-Teilsystem
+        nicht direkt vom Eingang ab.
+\end{enumerate}
+
+$\eta$ Teilsystem der Ordnung $n-r$ ist in $y$ unbeobachtbar, d.h. Eigenwerte von
+$Q$ stimmen mit invarianten Nullstellen überein.
+
+\subsubsection{Nulldynamik}
+Die bei einer Ausgangsnullung $y\equiv 0$ noch im System vorhandene Dynamik wird
+Nulldynamik genannt und ist durch:
+\begin{equation}
+    \dot{\eta} = Q \eta,\ \eta(0) = \eta_0 \in \mathbb{R}^{n-r}
+\end{equation}
+gegeben.
+
+\subsubsection{Starke Übertragungsblockierung}
+Die Eigenschwingungen der Nulldynamik sind die einzigen Eingangssignale, welche stark
+übertragungsblockiert werden können.
 
 \subsection{Ausgangsfolge}
+Inverses System für $r<n$:
+
+Interne Dynamik (numerisch) integrieren:
+\begin{equation}
+    \dot{\eta}_s(t) = Q \eta_s(t) + P \psi_\xi(y_s(t), \ldots, y_s^{(r-1)}(t))
+\end{equation}
+für $t>0$ mit $\eta_s(0) = \eta_{s,0} \in \mathbb{R}^{n-r}$
+
+Vorsteuerung durch Entkopplung und Aufprägung des Führungsverhaltens:
+\begin{equation}
+        u_s(t) = {(D^*)}^{-1} \left(y_s^{(r)}(t) - P^* \psi_\xi\left(y_s(t), \ldots, y_s^{(r-1)}(t)\right)
+        - Q^* \eta_s(t)\right)
+\end{equation}
 
 \section{Flachheitsbasierter Arbeitspunktwechsel}
 \subsection{Arbeitspunktwechsel}
+Bestimmung einer Solltrajektorie $x_s$ und einer Steuerung $u_s$ für
+das System so dass Arbeitspunktwechseln in endlicher Zeit vollzogen wird.
+
+Für $r=n$ muss kein 2-Punkt Randwertproblem gelöst sondern rein algebraische
+Lösung möglich.
 
 \subsection{Flachheit linearer Systeme}
+\subsubsection{Definition}
+Ein lineares Mehrgrößensystem $n$-ter Ordnung
+\sy
+mit $\rank B = p$ heißt flach, wenn es einen fiktiven Ausgang
+\begin{equation}
+    y_f = \T{\begin{pmatrix} y_{f1} & \ldots & y_{f2} \end{pmatrix}}
+\end{equation}
+so dass
+\begin{itemize}
+    \item
+        \begin{equation}
+            y_f = C_f x
+        \end{equation}
+    \item Und mit $\kappa = (\kappa_1, \ldots, \kappa_p)$:
+        \begin{equation}
+            x = \psi_x(y_{f1}, \dot{y_{f1}}, \ldots, y_{f1}^{(\kappa_1-1)},
+                 y_{fp}, \dot{y_{fp}}, \ldots, y_{fp}^{(\kappa_p-1)})
+        \end{equation}
+        (differentielle Parametrierung von $x$)
+    \item
+        \begin{equation}
+            x = \psi_u(y_{f1}, \dot{y_{f1}}, \ldots, y_{f1}^{(\kappa_1)},
+                 y_{fp}, \dot{y_{fp}}, \ldots, y_{fp}^{(\kappa_p)})
+        \end{equation}
+        (differentielle Parametierung von $u$) 
+\end{itemize}
+gelten. In diesem Fall ist $y_f$ ein flacher Ausgang des Systems.
+Die höchsten Zeitableitungen in der differentiellen Parametierung ($\kappa$) werden
+Steuerbarkeitsindizes genannt.
+
+Für lineare Systeme gilt:
+\begin{equation}
+    \text{steuerbar} \Leftrightarrow \text{flach}
+\end{equation}
 
 \subsection{Bestimmung flacher Ausgänge}
+\subsubsection{Characterisierung flacher Ausgänge (hinreichend)}
+Ein Ausgang $y_f$ ist ein flacher Ausgang, wenn
+\begin{itemize}
+    \item Für seine Differenzgrade $\kappa_i$ die Beziehung $\sum_i \kappa_i = n$ gilt und
+    \item das System bezüglich des Ausgangs $y_f$ ein-/ausgangsentkoppelbar ist, d.h.
+        $\det D^* \neq 0$.
+\end{itemize}
+
+\subsubsection{Steuerbarkeitsindizes}
+Ist $\kappa_i$ die kleinste ganze Zahl, so dass der Spaltenvektor $A^{\kappa_i} b_i$
+von den links in $Q_S$ gelegenen Spalten linear abhängig ist, dann ist $\kappa_i$ der
+Steuerbarkeitsindex zur $i$-ten Eingangsgröße $u_i$ ($i \in \{1, \ldots, p\}$).
+
+Auswahlmatrix bestimmen:
+\begin{equation}
+    \tilde{Q}_S = \begin{pmatrix}
+            b_1 & A b_1 & \cdots & A^{\kappa_1-1}b_1 & \cdots & b_p & \cdots &
+                A^{\kappa_p-1} b_p
+        \end{pmatrix}
+\end{equation}
+
+Ein möglicher flacher Ausgang ist dann gegeben durch:
+\begin{equation}
+    C_f = \begin{pmatrix} \T{e_{\kappa_1}} \\ \vdots \T{e_{\kappa_1 + \ldots + \kappa_p}} \end{pmatrix}
+        {\tilde{Q}_S}^{-1}
+\end{equation}
+mit $e_i \in \mathbb{R}^n$
 
 \subsection{Flachheitsbasierter Steuerungsentwurf}
+Vorgehen:
+\begin{enumerate}
+    \item Bestimmung von Anfangs- und Endpunkt der Solltrajektorie $y_{fs}$
+    \item Planung einer Solltrajektorie mit $u_s \in C \Rightarrow
+        y_{fi,s} \in C^{\kappa_i}$
+    \item Solltrajektorie für den Zustand und Steuerung bestimmen
+\end{enumerate}
 
 \subsection{Arbeitspunktwechsel für die Regelgröße}
+Solltrajektorie $y_s$ auf Basis von $y_{fi,s}$ berechnen:
+\begin{equation}
+    y_s = C \psi_x(y_f, \dot{y_f}, \ldots, y_f^{(\kappa-1)})
+        = \psi_y(y_f, \dot{y_f}, \ldots, y_f^{(\kappa-1)})
+\end{equation}
+Regler mit Sollwert $y_s$ bestimmen.
+
