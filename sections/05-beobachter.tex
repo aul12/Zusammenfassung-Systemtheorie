@@ -1,1 +1,127 @@
 \chapter{Lineare Beobachter}
+\section{Zustandsbeobachter}
+Ansatz: Regelung für Beobachterfehlerdynamik:
+\begin{equation}
+    \dot{\hat{x}} = A \hat{x} + Bu + L (y - C \hat{x})
+\end{equation}
+
+\subsubsection{Dualitätsprinzip für den Beobachterentwurf}
+Das Beobachterstabilisierungsproblem lässt sich auf die Stabilisierung des dualen
+Systems:
+\begin{eqnarray}
+    \dot{x}^* &=& \T{A} x^* + \T{C} u^* \\
+    y^* &=& \T{B} x^*
+\end{eqnarray}
+mittels einer Zustandsrückführung
+\begin{equation}
+    u^* = -\T{L} x^*
+\end{equation}
+zurückführen.
+
+\subsubsection{Hautus-Kriterium für Beobachtbarkeit}
+Ein Eigenwert $\lambda_i$ ist durch eine Beobachterrückführmatrix verschiebbar genau
+dann, wenn
+\begin{equation}
+    \rank \begin{pmatrix} A - \lambda_i I \\ C \end{pmatrix} = n
+\end{equation}
+gilt. In diesem Fall bezeichnet man den Eigenwert als beobachtbar. Sind alle Eigenwerte
+beobachtbar, dann ist das System beobachtbar.
+
+\subsubsection{Stabilisierbarkeitskriterium für die Beobachterfehlerdynamik}
+Die Beobachterfehlerdynamik ist genau dann stabilisierbar, wenn alle Eigenwerte
+$\lambda_i$ mit $\Re(\lambda_i) \geq 0$ beobachtbar sind.
+    
+\subsection{Entwurf durch Eigenwertvorgabe}
+\subsubsection{Beobachterformel der Vollständigen Modallen Synthese}
+Die Beobachterrückführmatrix:
+\begin{equation}
+    L = {\begin{pmatrix} \T{\tilde{w}_1} \\ \vdots \\ \T{\tilde{w}_n} \end{pmatrix}}^{-1}
+        \begin{pmatrix} \T{\bar{p}_1} \\ \vdots \\ \T{\bar{p}_n} \end{pmatrix}
+\end{equation}
+mit
+\begin{equation}
+    \T{\tilde{w}_i} = \T{\bar{p}_i} C {\left(A-\bar{\lambda}_i I\right)}^{-1}
+\end{equation}
+($i \in \{1, \ldots, n\}$). Verleiht der Beobachterfehlerdynamik
+\begin{equation}
+    \dot{e_B} = (A-LC) e_B
+\end{equation}
+die Eigenwerte $\bar{\lambda}_i$ und die zugehörigen Parametervektoren $\bar{p}_i$. Die
+Vektoren $\tilde{w}_i$, sind dann die links Eigenvektoren der Fehlerdynamik bzw. des
+Beobachters.
+
+Hinweise:
+\begin{itemize}
+    \item Es gelten die selben Einschränkungen wie bei der VMS
+    \item Für Eigenwerte bei $-\infty$ konvergiert der Beobachter gegen einen
+        Differenzierer, der die inverse Beobachterabbildung bestimmt.
+\end{itemize}
+
+\subsection{Quadratisch optimale Zustandsrekonstruktion: stationäres Kalman-Filter}
+\subsubsection{Deterministischer Beobachter}
+Die Beobachterrückführmatrix
+\begin{equation}
+    L = \bar{P}\T{C}\bar{R}^{-1}
+\end{equation}
+mit $\bar{P}>0$ eindeutige Lösung der algebraischen Riccati-Gleichung:
+\begin{equation}
+    A\bar{P}+\bar{P}\T{A}-\bar{P}\T{C}{\bar{R}}^{-1}C\bar{P}+\bar{Q}=0
+\end{equation}
+für $\bar{Q}>0$ und $\bar{R}>0$ führt bei einer beobachtbaren Strecke auf die exponentiell
+stabile Beobachterfehlerdynamik
+\begin{equation}
+    \dot{e_B} = (A-LC)e_B
+\end{equation}
+
+Optimalitätsannahmen:
+\begin{itemize}
+    \item $R$ ist weißes, mittelwertfreies Gaußsches Systemrauschen
+    \item $Q$ ist weißes, mittelwertfreies Gaußsches Messrauschen
+    \item Mess und Systemrauschen sind unkorreliert
+\end{itemize}
+
+\subsubsection{Stationäres Kalman-Filter}
+Gegeben sei das quadratische Gütemaß
+\begin{equation}
+    \bar{J}_\infty = \lim_{t \to \infty} \sum_{i=1}^n E\left\{ {\left(
+        x_i(t) - \hat{x}_i(t)\right)}^2\right\}
+\end{equation}
+dann minimiert der oben gegebene Beobachter dieses bei einem Schätzfehler von $P$.
+
+\section{Reduzierter Beobachter}
+Idee: $m$ Zustandsgrößen sind direkt aus dem Ausgang rekonstruierbar, also reicht ein
+Zustandsbeobachter der Dimension $n-m$.
+
+\subsection{Beobachterformel für den reduzierten Beobachter}
+Die Matrix
+\begin{equation}
+    T(\bar{\lambda}_i,l_i) = \begin{pmatrix}
+        \T{l_1} C {\left(A-\bar{\lambda}_1 I \right)}^{-1} \\
+        \vdots \\
+        \T{l_{n-m}} C {\left(A-\bar{\lambda}_{n-m} I \right)}^{-1} \end{pmatrix}
+\end{equation}
+mit
+\begin{equation}
+    \det \begin{pmatrix} C \\ T \end{pmatrix} \neq 0
+\end{equation}
+verleiht der Beobachterfehlerdynamik $\dot{\xi}-\dot{\hat{\xi}}=F(\xi-\hat{\xi})$
+mit $F=\diag(\bar{\lambda}_1, \ldots, \bar{\lambda}_{n-m})$ des reduzierten
+Zustandsbeobachters
+\begin{eqnarray}
+    \dot{\hat{\xi}} &=& F \hat{\xi} + TBu + L y,\ t>0, \hat{\xi}(0)=\hat{\xi}_0\in\mathbb{R}^{n-m} \\
+    \hat{x} &=& \Psi y + \Theta \hat{\xi}
+\end{eqnarray}
+
+der Ordnung $n-m$ bei $m$ Messgrößen $y$ mit
+\begin{equation}
+    \begin{pmatrix} \Psi & \Theta \end{pmatrix} =
+    {\begin{pmatrix} C \\ T \end{pmatrix}}^{-1}
+\end{equation}
+die Eigenwerte $\bar{\lambda}_i$ und die zugehörigen Parametervektoren $l_i$. 
+
+\section{Führungs- und Störbeobachter}
+\subsection{Signalmodellbeobachter}
+
+\subsection{Klassischer Störbeobachter}
+
+\subsection{Verallgemeinerter Störbeobachter}
