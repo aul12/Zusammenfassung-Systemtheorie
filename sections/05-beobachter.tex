@@ -121,7 +121,75 @@ die Eigenwerte $\bar{\lambda}_i$ und die zugehörigen Parametervektoren $l_i$.
 
 \section{Führungs- und Störbeobachter}
 \subsection{Signalmodellbeobachter}
+Mittels Signalbeobachter lassen sich modellgestützte Vorsteuerungen für das Führungs- und Störverhalten mit allg.
+Signalformen entwerfen:
+\begin{itemize}
+    \item Allg. modellgestützte Vorsteuerung des Führungsverhaltens:
+        \begin{eqnarray}
+            \dot{\hat{v}}_w &=& S_w \hat{v}_w + L_w (w-Q_w \hat{v}_w) \\
+            \dot{x}_s &=& A x_s + B u_s \\
+            u_s &=& -K x_s + M_{v_w} \hat{v}_w
+        \end{eqnarray}
+    \item Allg. modellgestützte Vorsteuerung des Störverhaltens:
+        \begin{eqnarray}
+            \dot{\hat{v}}_d &=& S_d \hat{v}_d + L_d (d-Q_d \hat{v}_d) \\
+            \dot{x}_s &=& A x_s + B u_s \\
+            u_s &=& -K x_s + M_{v_d} \hat{v}_d
+        \end{eqnarray}
+\end{itemize}
 
 \subsection{Klassischer Störbeobachter}
+Problem: Störgrößen nicht direkt messbar.
 
-\subsection{Verallgemeinerter Störbeobachter}
+Ansatz: Erweitertes System mit Stördynamik, dafür Zustandsbeobachter.
+
+\subsubsection{Beobachtbarkeit des erweiterten Systems}
+Das erweiterte System
+\begin{eqnarray}
+    \dot{x_e} &=& \begin{pmatrix}
+            S_d & 0 \\
+            G Q_d & A
+        \end{pmatrix}
+        x_e +
+        \begin{pmatrix} 0 \\ B \end{pmatrix} u \\
+    y &=& C_e x_e
+\end{eqnarray}
+ist beobachtbar, wenn
+\begin{itemize}
+    \item Minimales Störmodell: $(Q_d, S_d)$ beobachtbar
+    \item Streckenzustandsrekonstruierbarkeit: $(C, A)$ beobachtbar
+    \item Störmodellzustandsrekonstruierbarkeit:
+        \begin{equation}
+            \rank \begin{pmatrix} 
+                    A-sI & G \\
+                    C & 0
+                \end{pmatrix}
+            = n + q,\ \forall s \in \sigma(S_d)
+        \end{equation}
+        $(C, A, G)$ besitzt keine invarianten Nullstellen an Störmodelleigenwerten.
+\end{itemize}
+
+\subsection{Verallgemeinerter Störbeobachter (Dualer Davisonansatz)}
+Wenn
+\begin{itemize}
+    \item $(A, B)$ steuerbar
+    \item $(C, A)$ beobachtbar
+    \item System besitzt keine invarianten Nullstellen an Störmodelleigenwerten:
+        \begin{equation}
+            \det \begin{pmatrix} 
+                    A-sI & G \\
+                    C & 0
+                \end{pmatrix} \neq 0,\ \forall s \in \sigma(S)
+        \end{equation}
+\end{itemize}
+erfüllt ist, dann existiert der verallgemeinerte Störbeobachter mit Störgrößenaufschaltung
+\begin{eqnarray}
+    \dot{\hat{v}} &=& S^* \hat{v} + L_v (y- C \hat{x}),\ \hat{v}(0)=\hat{v}_0 \in \mathbb{R}^{n_v} \\
+    \dot{\hat{x}} &=& A \hat{x} + Bu + BP\hat{v} + L (y-C\hat{x}),\ \hat{x}(0)=\hat{x}_0 \in \mathbb{R}^n \\
+    u&=& -K \hat{x} - P \hat{v}
+\end{eqnarray}
+zur exponentiellen Stabilisierung der resultierenden Regelung und stellt robuste
+asymptotische Störkompensation sicher. Darin ist die Wahl von $p_i \in \mathbb{R}^{n_d}$
+($i \in \{1, \ldots, p\}$) mit $(\T{p_i}, S)$ beobachtbar ein Freiheitsgrad.
+
+
