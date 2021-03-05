@@ -1,1 +1,108 @@
 \chapter{Zwei-Freiheitsgrade-Regelung}
+\section{Struktur der Folgeregelung}
+\subsubsection{Online Sollvorgabe}
+Komponenten:
+\begin{itemize}
+    \item Modellgestützte $w$-Aufschaltung
+    \item Modellgestützte $d$-Aufschaltung
+    \item Ausgangsfolgeregler
+\end{itemize}
+
+Vorteile: Führungsverhalten, und Störverhalten bezüglich jeweils $d$ und $r$ kann
+separat ausgelegt werden.
+
+\subsubsection{Offline Sollvorgabe}
+Komponenten
+\begin{itemize}
+    \item Streckeninverse für Steuerung
+    \item Ausgangsfolgeregler
+\end{itemize}
+
+\section{Ausgangsfolgeregler}
+\subsection{Beobachterbasierte Zustandsrückführung}
+Entwurf der beobachterbasierten Ausgangsrückführung:
+\begin{enumerate}
+    \item Entwurf einer Zustandsrückführung
+        \begin{equation}
+            u_R = -K e_x
+        \end{equation}
+    \item Entwurf eines reduzierten Zustandsbeobachters
+    \item Implementierung des Stellgesetz auf basis Beobachterzustände
+    \item Resultiert in dynamische Ausgangsrückführung
+\end{enumerate}
+
+\subsection{Beobachterbasierte Ausgangsrückführung}
+Ansatz: Stellgesetz auf basis des Reduzierten Beobachters kann weiter
+reduziert werden wenn Dimension des reduzierten Beobachters ($n_0$) weiter reduziert wird.
+
+\subsubsection{Ausgangsreglerformel}
+Die Matrix
+\begin{equation}
+    R(\tilde{\lambda}_i, p_i, \bar{\lambda}_j, l_j) = -
+        \begin{pmatrix} p_1 & \ldots & p_{m+n_0} \end{pmatrix}
+        {\begin{pmatrix} G(\tilde{\lambda}_1) p_1 & \ldots &
+        G(\tilde{\lambda}_{m+n_0})p_{m+n_0} \end{pmatrix}}^{-1}
+\end{equation}
+mit
+\begin{equation}
+    G(s) = \begin{pmatrix}
+            F(s) \\
+            \frac{\T{l_1}}{s-\bar{\lambda}_1} \left(F(s) - F(\bar{\lambda}_1)\right) \\
+            \vdots \\
+            \frac{\T{l_{n_0}}}{s-\bar{\lambda}_{n_0}} \left(F(s) - F(\bar{\lambda}_{n_0})\right)
+        \end{pmatrix}
+\end{equation}
+für $\tilde{\lambda}_i \notin \left(\sigma(A) \cup \sigma(\Lambda)\right)$ und
+$\bar{\lambda}_i \notin \sigma(A)$ verleiht dem geregelten Fehlersystem:
+\begin{equation}
+    \dot{e_x} = (A-BRH) e_x
+\end{equation}
+die Eigenwerte $\tilde{\lambda}_i$ ($i \in \{1, \ldots, m+n_0\}$) und die zugehörigen 
+Parametervektoren $p_i$. Darin stellen die Beobachterreigenwerte $\bar{\lambda}_i$ und
+ihre Parametervektoren $\T{l_i}$ weitere FHG dar.
+
+\subsubsection{Reduzierter Ausgangsfolgeregler}
+Bei Verwendung eines $e_\xi$-Beobachters der Ordnung $n_0 < n-m$ können mit dem 
+Ausgangsfolgeregler $m+n_0<n$ Eigenwerte direkt vorgegeben werden, während die restlichen
+$n-(m+n_0)$ Eigenwerte durch eine Parameteroptimierung beeinflussbar sind.
+
+\subsection{Separationsprinzip}
+Die Eigenwerte des mittels einer beobachterbasierten Zustandsrückführung oder
+Ausgangsrückführung geregelten Fehlersystems sind die Nullstellen von:
+\begin{equation}
+    \det (\lambda I - \tilde{A}) = \det(\lambda I - F) \det(\lambda I - A + BRH)
+\end{equation}
+also die Eigenwerte des Beobachters und der Fehlerzustandsrückführung, damit bleiben
+die Dynamikvorgaben des getrennten Entwurfs im geschlossenen Regelkreis erhalten.
+Folglich existiert ein stabilisierender Ausgangsregler, wenn das Fehlersystem (bzw.
+die Strecke) steuer- und beobachtbar ist.
+
+\section{Berücksichtigung von Stellsignalbegrenzungen}
+\subsection{Ausgangsfolgeregler mit klassischem Davisonansatz}
+\subsubsection{Beobachtertechnik}
+Durch Einspeisung des begrenzten Stellsignals in den Beobachter wird die Rückführung
+über den Eingang im Begrenzungsfall unterbrochen. Damit tritt bei Begrenzungen nur die
+stabile Beobachterdynamik im offenen Kreis auf und das Beobachter-Windup wird vermieden.
+
+\vspace{.5cm}
+
+Hinweis: Stellsignalbegrenzung kann auch explizit vor System gehängt werden, damit
+wird Stellsignalbegrenzung des Systems nie erreicht.
+
+\vspace{.5cm}
+
+Vermeidung des Windups der Zustände $\bar{v}$ der angeregten Störmodelle:
+
+Einführung der Begrenzungsgröße:
+\begin{equation}
+    \Delta u  = u - u_b
+\end{equation}
+und zusätzliche Rückführung im Störmodell:
+\begin{equation}
+    \dot{\bar{v}} = S^* \bar{v} + B_{e_y} e_y B_{\Delta u} \Delta u
+\end{equation}
+dafür muss $S^*-B_{\Delta u}R_v$ Hurwitz Matrix sein, das ist möglich falls $(R_v, S*)$
+beobachtbar.
+
+\subsection{Ausgangsfolgeregler mit dualem Davisonansatz}
+Beobachtertechnik ausreichend.
