@@ -67,7 +67,7 @@ Der Entkopplungsregler
 \begin{equation}
     u_s = - {(D^*)}^{-1} \begin{pmatrix}
             \T{k_1^*} \\ \vdots \\ \T{k_m^*}
-        \end{pmatrix} +
+        \end{pmatrix} x_s +
         {(D^*)}^{-1} \begin{pmatrix}
             \tilde{a}_0^1 \\
              & \ddots \\
@@ -121,7 +121,7 @@ Idee: Weitere Integrierer einbauen:
 \begin{eqnarray}
     \dot{x} &=& Ax + BG_1 \xi + B G_2 \bar{u}_2 \\
     \dot{\xi} &=& \bar{u}_1 \\
-    C &=& Cx
+    y &=& Cx
 \end{eqnarray}
 
 Bestimmung von $n_\xi$ und $G$ für die dynamische Erweiterung zur Erzielung von

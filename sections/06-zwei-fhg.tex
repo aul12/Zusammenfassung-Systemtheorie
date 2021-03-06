@@ -28,7 +28,26 @@ Entwurf der beobachterbasierten Ausgangsrückführung:
         \end{equation}
     \item Entwurf eines reduzierten Zustandsbeobachters
     \item Implementierung des Stellgesetz auf basis Beobachterzustände
-    \item Resultiert in dynamische Ausgangsrückführung
+    \item Resultiert in dynamische Ausgangsrückführung:
+        \begin{eqnarray}
+            \begin{pmatrix}
+                \dot{\hat{e_\xi}} \\ \dot{\bar{v}}
+            \end{pmatrix}
+            &=&
+            \begin{pmatrix}
+                F - TBR_\xi & - T B R_v \\
+                0 & S^*
+            \end{pmatrix}
+            \begin{pmatrix}
+                \hat{e_\xi} \\ \bar{v}
+            \end{pmatrix}
+            +
+            \begin{pmatrix}
+                L-TBR_y \\ B_{e_y}
+            \end{pmatrix}
+            e_y \\
+            u_r &=& -R_y e_y - R_\xi \hat{e_\xi} - R_v \bar{v}
+        \end{eqnarray}
 \end{enumerate}
 
 \subsection{Beobachterbasierte Ausgangsrückführung}
